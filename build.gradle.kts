@@ -36,20 +36,15 @@ dependencies {
 
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
 
-    //Thymeleaf
     implementation("io.ktor:ktor-server-thymeleaf:$ktor_version")
     implementation("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
 
-    //Auth
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
 
-    //Server
     implementation("io.ktor:ktor-server-tomcat-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-sessions:$ktor_version")
 
-    //Html related
-    implementation("io.ktor:ktor-server-html-builder:$ktor_version")
     implementation("io.ktor:ktor-server-request-validation:$ktor_version")
     implementation("io.ktor:ktor-server-auto-head-response:$ktor_version")
     implementation("io.ktor:ktor-server-default-headers-jvm:$ktor_version")
@@ -57,34 +52,22 @@ dependencies {
 
     implementation("io.ktor:ktor-server-partial-content:$ktor_version")
 
-    //Openapi/swagger
-    implementation("io.ktor:ktor-server-swagger:$ktor_version")
-    implementation("io.ktor:ktor-server-openapi:$ktor_version")
-    implementation("io.swagger.codegen.v3:swagger-codegen-generators:1.0.36")
-
-    //Tests
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
 
-    //Password verifier
     implementation("org.passay:passay:1.6.2")
 
-    //Hashing password
     implementation("at.favre.lib:bcrypt:0.9.0")
 
-    //Logging
     implementation("io.ktor:ktor-server-call-logging:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
-    //Type-safe routing (I didn't use this)
-    implementation("io.ktor:ktor-server-resources:$ktor_version")
-
-    //Database
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.41.1")
     implementation("com.h2database:h2:$h2_version")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:2.7.5")
 }
