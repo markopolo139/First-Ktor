@@ -7,7 +7,7 @@ object MemberTable: IntIdTable("members", "member_id") {
     val firstname = varchar("firstname", 256)
     val lastname = varchar("lastname", 256)
     val birthdate = date("birthdate")
-    val birthplace = varchar("birthdate", 256)
+    val birthplace = varchar("birthplace", 256)
     val idNumber = varchar("id_number", 256)
     val address = varchar("address", 256)
     val joiningDate = date("joining_date")
