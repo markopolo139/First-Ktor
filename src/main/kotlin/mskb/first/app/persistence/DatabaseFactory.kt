@@ -1,6 +1,7 @@
 package mskb.first.app.persistence
 
 import kotlinx.coroutines.Dispatchers
+import mskb.first.app.persistence.schema.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.TransactionManager
@@ -19,7 +20,10 @@ object DatabaseFactory {
         TransactionManager.defaultDatabase = db
 
         transaction {
-            SchemaUtils.createMissingTablesAndColumns()
+            SchemaUtils.createMissingTablesAndColumns(
+                MemberTable, TrainingTable, EquipmentTable, EquipmentParameterTable, FireTruckTable, FireTruckParameterTable,
+                FireTruckEquipmentTable,
+            )
             commit()
         }
     }
