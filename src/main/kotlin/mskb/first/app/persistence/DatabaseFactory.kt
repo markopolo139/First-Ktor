@@ -22,7 +22,7 @@ object DatabaseFactory {
         transaction {
             SchemaUtils.createMissingTablesAndColumns(
                 MemberTable, TrainingTable, EquipmentTable, EquipmentParameterTable, FireTruckTable, FireTruckParameterTable,
-                FireTruckEquipmentTable,
+                FireTruckEquipmentTable, CalloutTable, SectionTable, SectionMemberTable
             )
             commit()
         }
