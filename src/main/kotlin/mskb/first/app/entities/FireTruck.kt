@@ -3,7 +3,7 @@ package mskb.first.app.entities
 import java.time.LocalDate
 
 data class FireTruck(
-    val id: Int, val name: String, val image: ByteArray, val vin: String, val productionYear: Int, val licensePlate: String,
+    val id: Int?, val name: String, val image: ByteArray, val vin: String, val productionYear: Int, val licensePlate: String,
     val operationNumber: String, val type: String, val totalWeight: Int, val horsepower: Int, val numberOfSeats: Int,
     val mileage: Int, val vehicleInspectionExpiryDate: LocalDate, val insuranceExpiryDate: LocalDate,
     val parameters: MutableList<FireTruckParameter>, val equipment: MutableList<Equipment>
