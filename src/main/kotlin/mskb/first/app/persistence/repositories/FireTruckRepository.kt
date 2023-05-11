@@ -67,9 +67,31 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
         entity
     }
 
+    suspend fun removeParameter(id: Int, parameterKey: String): FireTruckEntity = dbQuery {
+        parameterRepository.delete(id, parameterKey)
+        val entity = FireTruckEntity.findById(id)?.load(FireTruckEntity::parameters) ?: throw EntityNotFound()
+        entity
+    }
+
     suspend fun addEquipment(id: Int, equipment: Equipment): FireTruckEntity = dbQuery {
         val entity = FireTruckEntity.findById(id)?.load(FireTruckEntity::equipment) ?: throw EntityNotFound()
-        entity.equipment.toMutableList().add(equipmentRepository.save(equipment))
+
+        val newEquipment = entity.equipment.toMutableList()
+        newEquipment.add(equipmentRepository.save(equipment))
+
+        entity.equipment = SizedCollection(newEquipment)
+
+        entity
+    }
+
+    suspend fun removeEquipment(id: Int, equipmentId: Int): FireTruckEntity = dbQuery {
+        val entity = FireTruckEntity.findById(id)?.load(FireTruckEntity::equipment) ?: throw EntityNotFound()
+
+        val remove = equipmentRepository.getById(equipmentId)
+        val newEquipment = entity.equipment.toMutableList()
+        newEquipment.remove(remove)
+
+        entity.equipment = SizedCollection(newEquipment)
 
         entity
     }

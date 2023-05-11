@@ -5,6 +5,8 @@ import mskb.first.app.entities.EquipmentParameter
 import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
+import mskb.first.app.persistence.entities.FireTruckEntity
+import org.jetbrains.exposed.dao.load
 
 class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
 
@@ -40,6 +42,12 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
         val entity = EquipmentEntity.findById(id) ?: throw EntityNotFound()
         parameterRepository.save(parameter, entity)
 
+        entity
+    }
+
+    suspend fun removeParameter(id: Int, parameterKey: String): EquipmentEntity = dbQuery {
+        parameterRepository.delete(id, parameterKey)
+        val entity = EquipmentEntity.findById(id)?.load(EquipmentEntity::parameters) ?: throw EntityNotFound()
         entity
     }
 

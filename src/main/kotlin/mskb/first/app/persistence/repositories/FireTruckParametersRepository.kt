@@ -1,11 +1,14 @@
 package mskb.first.app.persistence.repositories
 
+import io.ktor.utils.io.*
 import mskb.first.app.entities.FireTruckParameter
 import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.exceptions.FeatureNotImplemented
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.FireTruckEntity
 import mskb.first.app.persistence.entities.FireTruckParametersEntity
+import mskb.first.app.persistence.schema.FireTruckParameterTable
+import org.jetbrains.exposed.sql.and
 
 class FireTruckParametersRepository: CrudRepository<FireTruckParameter, Int, FireTruckParametersEntity> {
     override suspend fun getAll(): List<FireTruckParametersEntity> = dbQuery {
@@ -45,5 +48,13 @@ class FireTruckParametersRepository: CrudRepository<FireTruckParameter, Int, Fir
 
     override suspend fun delete(id: Int): Boolean = dbQuery {
         throw FeatureNotImplemented()
+    }
+
+    suspend fun delete(parentId: Int, key: String): Boolean = dbQuery {
+        FireTruckParametersEntity.find {
+            (FireTruckParameterTable.key eq key) and (FireTruckParameterTable.fireTruckId eq parentId)
+        }.firstOrNull()?.delete()
+
+        true
     }
 }

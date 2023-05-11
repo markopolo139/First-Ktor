@@ -6,6 +6,8 @@ import mskb.first.app.exceptions.FeatureNotImplemented
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.entities.EquipmentParametersEntity
+import mskb.first.app.persistence.schema.EquipmentParameterTable
+import org.jetbrains.exposed.sql.and
 
 class EquipmentParametersRepository: CrudRepository<EquipmentParameter, Int, EquipmentParametersEntity> {
 
@@ -46,5 +48,13 @@ class EquipmentParametersRepository: CrudRepository<EquipmentParameter, Int, Equ
 
     override suspend fun delete(id: Int): Boolean {
         throw FeatureNotImplemented()
+    }
+
+    suspend fun delete(parentId: Int, key: String): Boolean = dbQuery {
+        EquipmentParametersEntity.find {
+            (EquipmentParameterTable.key eq key) and (EquipmentParameterTable.equipmentId eq parentId)
+        }.firstOrNull()?.delete()
+
+        true
     }
 }
