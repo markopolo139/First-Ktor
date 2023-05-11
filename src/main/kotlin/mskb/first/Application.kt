@@ -6,20 +6,23 @@ import io.ktor.server.tomcat.*
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.partialcontent.*
 import mskb.first.app.persistence.DatabaseFactory
+import mskb.first.plugins.configureCors
+import mskb.first.plugins.configureLogging
 import mskb.first.plugins.configureRouting
+import mskb.first.plugins.configureSerialization
 
 fun main(args: Array<String>){
     embeddedServer(Tomcat, environment = commandLineEnvironment(args), configure = {
-        configureTomcat = {
-            //Here can set up tomcat
-        }
+        configureTomcat = {  }
     }).start(wait = true)
 }
-
 
 fun Application.module() {
     DatabaseFactory.init()
     install(PartialContent)
     install(AutoHeadResponse)
+    configureLogging()
+    configureCors()
+    configureSerialization()
     configureRouting()
 }
