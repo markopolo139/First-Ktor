@@ -3,7 +3,7 @@ package mskb.first.app.entities
 import java.time.LocalDate
 
 data class Member(
-    val id: Int?, val firstname: String, val lastname: String, val birthdate: LocalDate, val birthplace: String,
-    val idNumber: String, val address: String, val joiningDate: LocalDate, val role: String, val phoneNumber: String,
-    val periodicMedicalExaminationExpiryDate: LocalDate, val isDriver: Boolean, val trainings: MutableList<Training>
+    val id: Int?, var firstname: String, var lastname: String, var birthdate: LocalDate, var birthplace: String,
+    var idNumber: String, var address: String, var joiningDate: LocalDate, var role: String, var phoneNumber: String,
+    var periodicMedicalExaminationExpiryDate: LocalDate, var isDriver: Boolean, val trainings: MutableList<Training>
 )
