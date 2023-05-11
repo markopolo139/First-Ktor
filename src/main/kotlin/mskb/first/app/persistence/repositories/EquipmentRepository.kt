@@ -1,6 +1,7 @@
 package mskb.first.app.persistence.repositories
 
 import mskb.first.app.entities.Equipment
+import mskb.first.app.entities.EquipmentParameter
 import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
@@ -32,6 +33,13 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
     }
 
     override suspend fun saveAll(entities: List<Equipment>): List<EquipmentEntity> = dbQuery { entities.map { save(it) } }
+
+    suspend fun addParameter(id: Int, parameter: EquipmentParameter): EquipmentEntity = dbQuery {
+        val entity = EquipmentEntity.findById(id) ?: throw EntityNotFound()
+        parameterRepository.save(parameter, entity)
+
+        entity
+    }
 
     override suspend fun update(entity: Equipment): Boolean = dbQuery {
         EquipmentEntity.findById(entity.id ?: -1)?.apply {
