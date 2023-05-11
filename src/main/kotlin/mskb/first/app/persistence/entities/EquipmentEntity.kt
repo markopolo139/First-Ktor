@@ -5,6 +5,7 @@ import mskb.first.app.persistence.schema.EquipmentTable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.SizedIterable
 
 class EquipmentEntity(id: EntityID<Int>): IntEntity(id) {
     companion object: IntEntityClass<EquipmentEntity>(EquipmentTable)
@@ -13,5 +14,6 @@ class EquipmentEntity(id: EntityID<Int>): IntEntity(id) {
     var quantity by EquipmentTable.quantity
     var category by EquipmentTable.category
     var storageLocation by EquipmentTable.storageLocation
-    val parameters by EquipmentParametersEntity optionalReferrersOn EquipmentParameterTable.equipmentId
+    val parameters: SizedIterable<EquipmentParametersEntity>?
+        by EquipmentParametersEntity optionalReferrersOn EquipmentParameterTable.equipmentId
 }

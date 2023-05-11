@@ -5,6 +5,7 @@ import mskb.first.app.persistence.schema.SectionTable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.SizedIterable
 
 class CalloutEntity(id: EntityID<Int>): IntEntity(id) {
     companion object: IntEntityClass<CalloutEntity>(CalloutTable)
@@ -12,5 +13,5 @@ class CalloutEntity(id: EntityID<Int>): IntEntity(id) {
     var type by CalloutTable.type
     var location by CalloutTable.location
     var details by CalloutTable.details
-    val sections by SectionEntity optionalReferrersOn SectionTable.calloutId
+    val sections: SizedIterable<SectionEntity>? by SectionEntity optionalReferrersOn SectionTable.calloutId
 }

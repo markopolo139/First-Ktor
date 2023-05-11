@@ -6,6 +6,7 @@ import mskb.first.app.persistence.schema.FireTruckTable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.SizedIterable
 
 class FireTruckEntity(id: EntityID<Int>): IntEntity(id) {
     companion object: IntEntityClass<FireTruckEntity>(FireTruckTable)
@@ -22,6 +23,7 @@ class FireTruckEntity(id: EntityID<Int>): IntEntity(id) {
     var mileage by FireTruckTable.mileage
     var vehicleInspectionExpiryDate by FireTruckTable.vehicleInspectionExpiryDate
     var insuranceExpiryDate by FireTruckTable.insuranceExpiryDate
-    val equipment by EquipmentEntity via FireTruckEquipmentTable
-    val parameters by FireTruckParametersEntity optionalReferrersOn FireTruckParameterTable.fireTruckId
+    val equipment: SizedIterable<EquipmentEntity>? by EquipmentEntity via FireTruckEquipmentTable
+    val parameters: SizedIterable<FireTruckParametersEntity>?
+        by FireTruckParametersEntity optionalReferrersOn FireTruckParameterTable.fireTruckId
 }

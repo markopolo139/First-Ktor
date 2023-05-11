@@ -10,5 +10,5 @@ class EquipmentParametersEntity(id: EntityID<Int>): IntEntity(id) {
     var key by EquipmentParameterTable.key
     var value by EquipmentParameterTable.value
 
-    var equipment by EquipmentEntity optionalReferencedOn EquipmentParameterTable.equipmentId
+    var equipment: EquipmentEntity? by EquipmentEntity optionalReferencedOn EquipmentParameterTable.equipmentId
 }

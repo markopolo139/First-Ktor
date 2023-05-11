@@ -5,6 +5,7 @@ import mskb.first.app.persistence.schema.TrainingTable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.SizedIterable
 
 class MemberEntity(id: EntityID<Int>): IntEntity(id) {
     companion object: IntEntityClass<MemberEntity>(MemberTable)
@@ -19,5 +20,5 @@ class MemberEntity(id: EntityID<Int>): IntEntity(id) {
     var phoneNumber by MemberTable.phoneNumber
     var periodicMedicalExaminationExpiryDate by MemberTable.periodicMedicalExaminationExpiryDate
     var isDriver by MemberTable.isDriver
-    val trainings by TrainingEntity optionalReferrersOn TrainingTable.memberId
+    val trainings: SizedIterable<TrainingEntity>? by TrainingEntity optionalReferrersOn TrainingTable.memberId
 }

@@ -13,5 +13,5 @@ class SectionEntity(id: EntityID<Int>): IntEntity(id) {
     val crew by MemberEntity via SectionMemberTable
     var fireTruck by FireTruckEntity referencedOn SectionTable.fireTruckId
 
-    var callout by CalloutEntity optionalReferencedOn SectionTable.calloutId
+    var callout: CalloutEntity? by CalloutEntity optionalReferencedOn SectionTable.calloutId
 }

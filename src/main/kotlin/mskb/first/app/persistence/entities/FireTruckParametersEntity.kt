@@ -11,5 +11,5 @@ class FireTruckParametersEntity(id: EntityID<Int>): IntEntity(id) {
     var key by FireTruckParameterTable.key
     var value by FireTruckParameterTable.value
 
-    var fireTruck by FireTruckEntity optionalReferencedOn FireTruckParameterTable.fireTruckId
+    var fireTruck: FireTruckEntity? by FireTruckEntity optionalReferencedOn FireTruckParameterTable.fireTruckId
 }
