@@ -72,4 +72,5 @@ dependencies {
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:2.7.5")
 
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 }
