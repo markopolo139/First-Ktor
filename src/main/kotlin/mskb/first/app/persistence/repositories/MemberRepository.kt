@@ -38,10 +38,7 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
             }
         }
 
-
-        dbQuery {
-            trainingRepository.saveAll(entity.trainings, member)
-        }
+        trainingRepository.saveAll(entity.trainings, member)
 
         return dbQuery { MemberEntity[member.id] }
     }

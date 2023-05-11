@@ -16,16 +16,19 @@ class CalloutRepository: CrudRepository<Callout, Int, CalloutEntity> {
         CalloutEntity.findById(id) ?: throw EntityNotFound()
     }
 
-    override suspend fun save(entity: Callout): CalloutEntity = dbQuery {
-        val callout = CalloutEntity.new {
-            alarmDate = entity.alarmDate
-            type = entity.type
-            location = entity.location
-            details = entity.details
+    override suspend fun save(entity: Callout): CalloutEntity {
+        val callout = dbQuery {
+            CalloutEntity.new {
+                alarmDate = entity.alarmDate
+                type = entity.type
+                location = entity.location
+                details = entity.details
+            }
         }
 
         sectionRepository.saveAll(entity.sections, callout)
-        callout
+
+        return callout
     }
 
     override suspend fun saveAll(entities: List<Callout>): List<CalloutEntity> = dbQuery { entities.map { save(it) } }
@@ -38,7 +41,10 @@ class CalloutRepository: CrudRepository<Callout, Int, CalloutEntity> {
 
     override suspend fun update(entity: Callout): Boolean = dbQuery {
         CalloutEntity.findById(entity.id ?: -1)?.apply {
-
+            alarmDate = entity.alarmDate
+            type = entity.type
+            location = entity.location
+            details = entity.details
         } ?: throw EntityNotFound()
         true
     }
