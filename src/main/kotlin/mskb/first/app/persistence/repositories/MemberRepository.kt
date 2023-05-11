@@ -3,6 +3,7 @@ package mskb.first.app.persistence.repositories
 import kotlinx.coroutines.runBlocking
 import mskb.first.app.entities.Member
 import mskb.first.app.entities.Training
+import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.MemberEntity
 import org.jetbrains.exposed.dao.load
@@ -16,8 +17,8 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
         MemberEntity.all().toList()
     }
 
-    override suspend fun getById(id: Int): MemberEntity? = dbQuery {
-        MemberEntity.findById(id)
+    override suspend fun getById(id: Int): MemberEntity = dbQuery {
+        MemberEntity.findById(id) ?: throw EntityNotFound()
     }
 
     override suspend fun save(entity: Member): MemberEntity {
@@ -48,9 +49,11 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
     override suspend fun saveAll(entities: List<Member>): List<MemberEntity> = dbQuery { entities.map { save(it) } }
 
     suspend fun saveNewTraining(id: Int, training: Training): MemberEntity = dbQuery {
-        trainingRepository.save(training, MemberEntity[id])
+        val member = MemberEntity.findById(id) ?: throw EntityNotFound()
 
-        MemberEntity[id]
+        trainingRepository.save(training, member)
+
+        member
     }
 
     override suspend fun update(entity: Member): Boolean = dbQuery {
@@ -72,7 +75,7 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
     }
 
     override suspend fun delete(id: Int): Boolean = dbQuery {
-        MemberEntity[id].delete()
+        MemberEntity.findById(id)?.delete()
         true
     }
 }
