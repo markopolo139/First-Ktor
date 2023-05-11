@@ -10,7 +10,7 @@ class SectionEntity(id: EntityID<Int>): IntEntity(id) {
     companion object: IntEntityClass<SectionEntity>(SectionTable)
     var departureTime by SectionTable.departureTime
     var returnTime by SectionTable.returnTime
-    val crew by MemberEntity via SectionMemberTable
+    var crew by MemberEntity via SectionMemberTable
     var fireTruck by FireTruckEntity referencedOn SectionTable.fireTruckId
 
     var callout: CalloutEntity? by CalloutEntity optionalReferencedOn SectionTable.calloutId
