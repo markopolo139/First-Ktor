@@ -13,47 +13,48 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
     private val trainingRepository = TrainingRepository()
 
     override suspend fun getAll(): List<MemberEntity> = dbQuery {
-        MemberEntity.all().with(MemberEntity::trainings).toList()
+        MemberEntity.all().toList()
     }
 
     override suspend fun getById(id: Int): MemberEntity? = dbQuery {
-        MemberEntity.findById(id)?.load(MemberEntity::trainings)
+        MemberEntity.findById(id)
     }
 
-    override suspend fun save(entity: Member): MemberEntity = dbQuery {
-        val member = MemberEntity.new(entity.id) {
-            firstname = entity.firstname
-            lastname = entity.lastname
-            birthdate = entity.birthdate
-            birthplace = entity.birthplace
-            idNumber = entity.idNumber
-            address = entity.address
-            joiningDate = entity.joiningDate
-            role = entity.role
-            phoneNumber = entity.phoneNumber
-            periodicMedicalExaminationExpiryDate = entity.periodicMedicalExaminationExpiryDate
-            isDriver = entity.isDriver
+    override suspend fun save(entity: Member): MemberEntity {
+        val member = dbQuery {
+            MemberEntity.new(entity.id) {
+                firstname = entity.firstname
+                lastname = entity.lastname
+                birthdate = entity.birthdate
+                birthplace = entity.birthplace
+                idNumber = entity.idNumber
+                address = entity.address
+                joiningDate = entity.joiningDate
+                role = entity.role
+                phoneNumber = entity.phoneNumber
+                periodicMedicalExaminationExpiryDate = entity.periodicMedicalExaminationExpiryDate
+                isDriver = entity.isDriver
+            }
         }
 
-        runBlocking {
+
+        dbQuery {
             trainingRepository.saveAll(entity.trainings, member)
         }
 
-        MemberEntity[member.id]
+        return dbQuery { MemberEntity[member.id].load(MemberEntity::trainings) }
     }
 
     override suspend fun saveAll(entities: List<Member>): List<MemberEntity> = dbQuery { entities.map { save(it) } }
 
     suspend fun saveNewTraining(id: Int, training: Training): MemberEntity = dbQuery {
-        runBlocking {
-            trainingRepository.save(training, MemberEntity[id])
-        }
+        trainingRepository.save(training, MemberEntity[id])
 
         MemberEntity[id]
     }
 
     override suspend fun update(entity: Member): Boolean = dbQuery {
-        val member = MemberEntity[entity.id!!].apply {
+        MemberEntity[entity.id!!].apply {
             firstname = entity.firstname
             lastname = entity.lastname
             birthdate = entity.birthdate
