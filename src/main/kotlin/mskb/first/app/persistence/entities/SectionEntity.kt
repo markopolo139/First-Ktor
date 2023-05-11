@@ -11,5 +11,7 @@ class SectionEntity(id: EntityID<Int>): IntEntity(id) {
     var departureTime by SectionTable.departureTime
     var returnTime by SectionTable.returnTime
     val crew by MemberEntity via SectionMemberTable
-    val fireTruck by FireTruckEntity backReferencedOn SectionTable.fireTruckId
+    var fireTruck by FireTruckEntity referencedOn SectionTable.fireTruckId
+
+    var callout by CalloutEntity referencedOn SectionTable.calloutId
 }

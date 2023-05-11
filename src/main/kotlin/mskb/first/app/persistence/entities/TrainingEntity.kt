@@ -10,4 +10,6 @@ class TrainingEntity(id: EntityID<String>): Entity<String>(id) {
     var type by TrainingTable.type
     var trainingDate by TrainingTable.trainingDate
     var expirationDate by TrainingTable.expirationDate
+
+    var member by MemberEntity referencedOn TrainingTable.memberId
 }
