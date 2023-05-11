@@ -70,4 +70,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-java-time:0.41.1")
     implementation("com.h2database:h2:$h2_version")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:2.7.5")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 }
