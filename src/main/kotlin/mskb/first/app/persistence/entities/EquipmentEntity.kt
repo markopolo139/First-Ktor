@@ -13,5 +13,5 @@ class EquipmentEntity(id: EntityID<Int>): IntEntity(id) {
     var quantity by EquipmentTable.quantity
     var category by EquipmentTable.category
     var storageLocation by EquipmentTable.storageLocation
-    val parameters by EquipmentParametersEntity referrersOn EquipmentParameterTable.equipmentId
+    val parameters by EquipmentParametersEntity optionalReferrersOn EquipmentParameterTable.equipmentId
 }

@@ -11,5 +11,5 @@ class TrainingEntity(id: EntityID<String>): Entity<String>(id) {
     var trainingDate by TrainingTable.trainingDate
     var expirationDate by TrainingTable.expirationDate
 
-    var member by MemberEntity referencedOn TrainingTable.memberId
+    var member by MemberEntity optionalReferencedOn TrainingTable.memberId
 }

@@ -6,7 +6,7 @@ data class FireTruck(
     val id: Int?, var name: String, val image: ByteArray, var vin: String, var productionYear: Int, var licensePlate: String,
     var operationNumber: String, var type: String, var totalWeight: Int, var horsepower: Int, var numberOfSeats: Int,
     var mileage: Int, var vehicleInspectionExpiryDate: LocalDate, var insuranceExpiryDate: LocalDate,
-    val parameters: MutableList<FireTruckParameter>, val equipment: MutableList<Equipment>
+    val parameters: MutableList<FireTruckParameter>?, val equipment: MutableList<Equipment>?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

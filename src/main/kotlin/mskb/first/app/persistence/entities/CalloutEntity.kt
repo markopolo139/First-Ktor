@@ -12,5 +12,5 @@ class CalloutEntity(id: EntityID<Int>): IntEntity(id) {
     var type by CalloutTable.type
     var location by CalloutTable.location
     var details by CalloutTable.details
-    val sections by SectionEntity referrersOn SectionTable.calloutId
+    val sections by SectionEntity optionalReferrersOn SectionTable.calloutId
 }

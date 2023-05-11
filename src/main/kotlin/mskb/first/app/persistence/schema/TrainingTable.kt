@@ -14,5 +14,5 @@ object TrainingTable: IdTable<String>("trainings") {
     val type = enumerationByName("training_type", 128, TrainingType::class)
     val trainingDate = date("training_date")
     val expirationDate = date("expiration_date")
-    val memberId = reference("member_id", MemberTable, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
+    val memberId = optReference("member_id", MemberTable, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
 }

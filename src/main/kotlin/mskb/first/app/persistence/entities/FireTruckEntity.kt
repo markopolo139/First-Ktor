@@ -23,5 +23,5 @@ class FireTruckEntity(id: EntityID<Int>): IntEntity(id) {
     var vehicleInspectionExpiryDate by FireTruckTable.vehicleInspectionExpiryDate
     var insuranceExpiryDate by FireTruckTable.insuranceExpiryDate
     val equipment by EquipmentEntity via FireTruckEquipmentTable
-    val parameters by FireTruckParametersEntity referrersOn FireTruckParameterTable.fireTruckId
+    val parameters by FireTruckParametersEntity optionalReferrersOn FireTruckParameterTable.fireTruckId
 }

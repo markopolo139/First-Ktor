@@ -19,5 +19,5 @@ class MemberEntity(id: EntityID<Int>): IntEntity(id) {
     var phoneNumber by MemberTable.phoneNumber
     var periodicMedicalExaminationExpiryDate by MemberTable.periodicMedicalExaminationExpiryDate
     var isDriver by MemberTable.isDriver
-    val trainings by TrainingEntity referrersOn TrainingTable.memberId
+    val trainings by TrainingEntity optionalReferrersOn TrainingTable.memberId
 }
