@@ -57,7 +57,7 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
     }
 
     override suspend fun update(entity: Member): Boolean = dbQuery {
-        MemberEntity[entity.id!!].apply {
+        MemberEntity.findById(entity.id ?: -1)?.apply {
             firstname = entity.firstname
             lastname = entity.lastname
             birthdate = entity.birthdate
@@ -69,7 +69,7 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
             phoneNumber = entity.phoneNumber
             periodicMedicalExaminationExpiryDate = entity.periodicMedicalExaminationExpiryDate
             isDriver = entity.isDriver
-        }
+        } ?: throw EntityNotFound()
 
         true
     }
