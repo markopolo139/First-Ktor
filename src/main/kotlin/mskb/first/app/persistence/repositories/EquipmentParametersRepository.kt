@@ -1,6 +1,7 @@
 package mskb.first.app.persistence.repositories
 
 import mskb.first.app.entities.EquipmentParameter
+import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.exceptions.FeatureNotImplemented
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
@@ -12,7 +13,9 @@ class EquipmentParametersRepository: CrudRepository<EquipmentParameter, Int, Equ
         EquipmentParametersEntity.all().toList()
     }
 
-    override suspend fun getById(id: Int): EquipmentParametersEntity? = dbQuery { EquipmentParametersEntity.findById(id) }
+    override suspend fun getById(id: Int): EquipmentParametersEntity = dbQuery {
+        EquipmentParametersEntity.findById(id) ?: throw EntityNotFound()
+    }
 
     override suspend fun save(entity: EquipmentParameter): EquipmentParametersEntity = dbQuery {
         EquipmentParametersEntity.new {
