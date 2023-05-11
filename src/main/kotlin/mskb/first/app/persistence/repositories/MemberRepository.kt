@@ -42,7 +42,7 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
             trainingRepository.saveAll(entity.trainings, member)
         }
 
-        return dbQuery { MemberEntity[member.id].load(MemberEntity::trainings) }
+        return dbQuery { MemberEntity[member.id] }
     }
 
     override suspend fun saveAll(entities: List<Member>): List<MemberEntity> = dbQuery { entities.map { save(it) } }
