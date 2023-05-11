@@ -18,18 +18,20 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
         EquipmentEntity.findById(id) ?: throw EntityNotFound()
     }
 
-    override suspend fun save(entity: Equipment): EquipmentEntity = dbQuery {
-        val equipment = EquipmentEntity.new(entity.id) {
-            name = entity.name
-            serialNumber = entity.serialNumber
-            quantity = entity.quantity
-            category = entity.category
-            storageLocation = entity.storageLocation
+    override suspend fun save(entity: Equipment): EquipmentEntity {
+        val equipment = dbQuery {
+            EquipmentEntity.new(entity.id) {
+                name = entity.name
+                serialNumber = entity.serialNumber
+                quantity = entity.quantity
+                category = entity.category
+                storageLocation = entity.storageLocation
+            }
         }
 
         parameterRepository.saveAll(entity.parameters, equipment)
 
-        equipment
+        return equipment
     }
 
     override suspend fun saveAll(entities: List<Equipment>): List<EquipmentEntity> = dbQuery { entities.map { save(it) } }

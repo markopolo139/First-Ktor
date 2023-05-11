@@ -1,7 +1,6 @@
 package mskb.first.app.persistence.repositories
 
 import mskb.first.app.entities.Equipment
-import mskb.first.app.entities.EquipmentParameter
 import mskb.first.app.entities.FireTruck
 import mskb.first.app.entities.FireTruckParameter
 import mskb.first.app.exceptions.AppException
@@ -10,6 +9,7 @@ import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.entities.FireTruckEntity
 import org.jetbrains.exposed.dao.load
+import org.jetbrains.exposed.dao.with
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 
@@ -26,29 +26,34 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
         FireTruckEntity.findById(id) ?: throw EntityNotFound()
     }
 
-    override suspend fun save(entity: FireTruck): FireTruckEntity = dbQuery {
-        val equipment = entity.equipment.map { equipmentRepository.save(it) }
+    override suspend fun save(entity: FireTruck): FireTruckEntity {
+        val equipments = equipmentRepository.saveAll(entity.equipment)
 
-        val fireTruck = FireTruckEntity.new(entity.id) {
-            name = entity.name
-            image = ExposedBlob(entity.image)
-            vin = entity.vin
-            productionYear = entity.productionYear
-            licensePlate = entity.licensePlate
-            operationalNumber = entity.operationNumber
-            type = entity.type
-            totalWeight = entity.totalWeight
-            horsepower = entity.horsepower
-            numberOfSeats = entity.numberOfSeats
-            mileage = entity.mileage
-            vehicleInspectionExpiryDate = entity.vehicleInspectionExpiryDate
-            insuranceExpiryDate = entity.insuranceExpiryDate
-            this.equipment = SizedCollection(equipment)
+        val fireTruck = dbQuery {
+            FireTruckEntity.new(entity.id) {
+                name = entity.name
+                image = ExposedBlob(entity.image)
+                vin = entity.vin
+                productionYear = entity.productionYear
+                licensePlate = entity.licensePlate
+                operationalNumber = entity.operationNumber
+                type = entity.type
+                totalWeight = entity.totalWeight
+                horsepower = entity.horsepower
+                numberOfSeats = entity.numberOfSeats
+                mileage = entity.mileage
+                vehicleInspectionExpiryDate = entity.vehicleInspectionExpiryDate
+                insuranceExpiryDate = entity.insuranceExpiryDate
+            }
+        }
+
+        dbQuery {
+            fireTruck.equipment = SizedCollection(equipments)
         }
 
         parameterRepository.saveAll(entity.parameters, fireTruck)
 
-        fireTruck
+        return fireTruck
     }
 
     override suspend fun saveAll(entities: List<FireTruck>): List<FireTruckEntity> = dbQuery {

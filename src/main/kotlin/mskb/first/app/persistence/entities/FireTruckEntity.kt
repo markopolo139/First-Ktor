@@ -23,7 +23,7 @@ class FireTruckEntity(id: EntityID<Int>): IntEntity(id) {
     var mileage by FireTruckTable.mileage
     var vehicleInspectionExpiryDate by FireTruckTable.vehicleInspectionExpiryDate
     var insuranceExpiryDate by FireTruckTable.insuranceExpiryDate
-    var equipment: SizedIterable<EquipmentEntity> by EquipmentEntity via FireTruckEquipmentTable
+    var equipment by EquipmentEntity via FireTruckEquipmentTable
     val parameters: SizedIterable<FireTruckParametersEntity>?
         by FireTruckParametersEntity optionalReferrersOn FireTruckParameterTable.fireTruckId
 }
