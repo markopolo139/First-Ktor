@@ -17,6 +17,15 @@ fun main(args: Array<String>){
     }).start(wait = true)
 }
 
+//TODO:
+// when adding equipment, also add it to storage location equipment list
+// when creating, deleting fire truck add it as storage location
+// storage location also have default, where all equipment from deleted fire truck will go
+// storage location will also have standard repository
+// adding equipment changes only it's storage location
+// repo for equipment (add getting equipment by location)
+// delete equipment from fire truck returns it to default location
+// archivization option for fire truck, member (when deleting setting it) (it will just be additional column in database)
 fun Application.module() {
     DatabaseFactory.init()
     install(PartialContent)

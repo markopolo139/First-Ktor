@@ -6,11 +6,13 @@ import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.entities.FireTruckEntity
+import mskb.first.app.persistence.entities.StorageLocationEntity
 import org.jetbrains.exposed.dao.load
 
 class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
 
     private val parameterRepository = EquipmentParametersRepository()
+    private val storageLocationRepository = StorageLocationRepository()
 
     override suspend fun getAll(): List<EquipmentEntity> = dbQuery {
         EquipmentEntity.all().toList()
@@ -21,13 +23,16 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
     }
 
     override suspend fun save(entity: Equipment): EquipmentEntity {
+        val storage = if (entity.storageLocation == "default" || entity.storageLocation.isBlank())
+            storageLocationRepository.getDefault() else storageLocationRepository.findByName(entity.storageLocation)
+
         val equipment = dbQuery {
             EquipmentEntity.new(entity.id) {
                 name = entity.name
                 serialNumber = entity.serialNumber
                 quantity = entity.quantity
                 category = entity.category
-                storageLocation = entity.storageLocation
+                storageLocation = storage
             }
         }
 
@@ -37,6 +42,10 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
     }
 
     override suspend fun saveAll(entities: List<Equipment>): List<EquipmentEntity> = dbQuery { entities.map { save(it) } }
+
+    suspend fun changeLocation(entity: Equipment, newStorage: StorageLocationEntity) {
+        TODO("Not yet implemented")
+    }
 
     suspend fun addParameter(id: Int, parameter: EquipmentParameter): EquipmentEntity = dbQuery {
         val entity = EquipmentEntity.findById(id) ?: throw EntityNotFound()
@@ -51,16 +60,21 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
         entity
     }
 
-    override suspend fun update(entity: Equipment): Boolean = dbQuery {
-        EquipmentEntity.findById(entity.id ?: -1)?.apply {
-            name = entity.name
-            serialNumber = entity.serialNumber
-            quantity = entity.quantity
-            category = entity.category
-            storageLocation = entity.storageLocation
-        } ?: throw EntityNotFound()
+    override suspend fun update(entity: Equipment): Boolean {
 
-        true
+        val storage = storageLocationRepository.findByName(entity.storageLocation)
+
+        dbQuery {
+            EquipmentEntity.findById(entity.id ?: -1)?.apply {
+                name = entity.name
+                serialNumber = entity.serialNumber
+                quantity = entity.quantity
+                category = entity.category
+                storageLocation = storage
+            } ?: throw EntityNotFound()
+        }
+
+        return true
     }
 
     override suspend fun delete(id: Int): Boolean = dbQuery {

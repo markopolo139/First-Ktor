@@ -13,7 +13,7 @@ class EquipmentEntity(id: EntityID<Int>): IntEntity(id) {
     var serialNumber by EquipmentTable.serialNumber
     var quantity by EquipmentTable.quantity
     var category by EquipmentTable.category
-    var storageLocation by EquipmentTable.storageLocation
+    var storageLocation by StorageLocationEntity referencedOn EquipmentTable.storageLocation
     val parameters: SizedIterable<EquipmentParametersEntity>?
         by EquipmentParametersEntity optionalReferrersOn EquipmentParameterTable.equipmentId
 }

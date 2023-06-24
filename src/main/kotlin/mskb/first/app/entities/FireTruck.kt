@@ -6,7 +6,7 @@ data class FireTruck(
     val id: Int?, var name: String, val image: ByteArray, var vin: String, var productionYear: Int, var licensePlate: String,
     var operationNumber: String, var type: String, var totalWeight: Int, var horsepower: Int, var numberOfSeats: Int,
     var mileage: Int, var vehicleInspectionExpiryDate: LocalDate, var insuranceExpiryDate: LocalDate,
-    val parameters: MutableList<FireTruckParameter>, val equipment: MutableList<Equipment>
+    val parameters: MutableList<FireTruckParameter>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -27,8 +27,7 @@ data class FireTruck(
         if (mileage != other.mileage) return false
         if (vehicleInspectionExpiryDate != other.vehicleInspectionExpiryDate) return false
         if (insuranceExpiryDate != other.insuranceExpiryDate) return false
-        if (parameters != other.parameters) return false
-        return equipment == other.equipment
+        return parameters != other.parameters
     }
 
     override fun hashCode(): Int {
@@ -46,7 +45,6 @@ data class FireTruck(
         result = 31 * result + vehicleInspectionExpiryDate.hashCode()
         result = 31 * result + insuranceExpiryDate.hashCode()
         result = 31 * result + parameters.hashCode()
-        result = 31 * result + equipment.hashCode()
         return result
     }
 }

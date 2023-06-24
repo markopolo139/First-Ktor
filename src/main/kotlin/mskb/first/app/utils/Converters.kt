@@ -12,16 +12,19 @@ fun MemberEntity.toApp() = Member(
     periodicMedicalExaminationExpiryDate, isDriver, trainings?.map { it.toApp() }?.toMutableList() ?: mutableListOf()
 )
 
+fun StorageLocationEntity.toApp() = StorageLocation(
+    name, equipment.map { it.toApp() }, default
+)
+
 fun EquipmentEntity.toApp() = Equipment(
-    id.value, name, serialNumber, quantity, category, storageLocation,
+    id.value, name, serialNumber, quantity, category, storageLocation.name,
     parameters?.map { it.toApp() }?.toMutableList() ?: mutableListOf()
 )
 
 fun FireTruckEntity.toApp() = FireTruck(
     id.value, name, image?.bytes ?: ByteArray(0), vin, productionYear, licensePlate, operationalNumber, type,
     totalWeight, horsepower, numberOfSeats, mileage, vehicleInspectionExpiryDate, insuranceExpiryDate,
-    parameters?.map { it.toApp() }?.toMutableList() ?: mutableListOf(),
-    equipment?.map { it.toApp() }?.toMutableList() ?: mutableListOf()
+    parameters?.map { it.toApp() }?.toMutableList() ?: mutableListOf()
 )
 
 fun SectionEntity.toApp() = Section(
