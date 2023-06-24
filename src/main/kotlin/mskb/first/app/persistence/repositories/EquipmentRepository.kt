@@ -22,6 +22,8 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
         EquipmentEntity.findById(id) ?: throw EntityNotFound()
     }
 
+    //TODO: getting equipment by storage location
+
     override suspend fun save(entity: Equipment): EquipmentEntity {
         val storage = if (entity.storageLocation == "default" || entity.storageLocation.isBlank())
             storageLocationRepository.getDefault() else storageLocationRepository.findByName(entity.storageLocation)
