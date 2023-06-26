@@ -11,7 +11,7 @@ object EquipmentTable: IntIdTable("equipments", "equipment_id") {
     val storageLocation = reference(
         "storage_location_id",
         StorageLocationTable,
-        onDelete = ReferenceOption.CASCADE,
+        onDelete = ReferenceOption.RESTRICT,
         onUpdate = ReferenceOption.CASCADE
     )
 }

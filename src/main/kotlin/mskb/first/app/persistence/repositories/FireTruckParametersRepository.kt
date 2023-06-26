@@ -10,7 +10,7 @@ import mskb.first.app.persistence.entities.FireTruckParametersEntity
 import mskb.first.app.persistence.schema.FireTruckParameterTable
 import org.jetbrains.exposed.sql.and
 
-class FireTruckParametersRepository: CrudRepository<FireTruckParameter, Int, FireTruckParametersEntity> {
+class FireTruckParametersRepository : CrudRepository<FireTruckParameter, Int, FireTruckParametersEntity> {
     override suspend fun getAll(): List<FireTruckParametersEntity> = dbQuery {
         FireTruckParametersEntity.all().toList()
     }
@@ -38,7 +38,9 @@ class FireTruckParametersRepository: CrudRepository<FireTruckParameter, Int, Fir
         entities.map { save(it) }
     }
 
-    suspend fun saveAll(entities: List<FireTruckParameter>, fireTruck: FireTruckEntity): List<FireTruckParametersEntity> = dbQuery {
+    suspend fun saveAll(
+        entities: List<FireTruckParameter>, fireTruck: FireTruckEntity
+    ): List<FireTruckParametersEntity> = dbQuery {
         entities.map { save(it, fireTruck) }
     }
 
