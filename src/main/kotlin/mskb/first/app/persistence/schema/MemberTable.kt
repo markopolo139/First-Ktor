@@ -15,4 +15,5 @@ object MemberTable: IntIdTable("members", "member_id") {
     val phoneNumber = varchar("phone_number", 20)
     val periodicMedicalExaminationExpiryDate = date("periodic_medical_examination_expiry_date")
     val isDriver = bool("driver")
+    val archived = bool("archived")
 }

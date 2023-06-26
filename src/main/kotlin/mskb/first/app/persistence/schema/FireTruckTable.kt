@@ -17,4 +17,5 @@ object FireTruckTable: IntIdTable("fire_trucks", "fire_truck_id") {
     val mileage = integer("mileage")
     val vehicleInspectionExpiryDate = date("vehicle_inspection_expiry_date")
     val insuranceExpiryDate = date("insurance_expiry_date")
+    val archived = bool("archived")
 }

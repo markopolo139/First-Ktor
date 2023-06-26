@@ -20,5 +20,6 @@ class MemberEntity(id: EntityID<Int>): IntEntity(id) {
     var phoneNumber by MemberTable.phoneNumber
     var periodicMedicalExaminationExpiryDate by MemberTable.periodicMedicalExaminationExpiryDate
     var isDriver by MemberTable.isDriver
+    var archived by MemberTable.archived
     val trainings: SizedIterable<TrainingEntity>? by TrainingEntity optionalReferrersOn TrainingTable.memberId
 }

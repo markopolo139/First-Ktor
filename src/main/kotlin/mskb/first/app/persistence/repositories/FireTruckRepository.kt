@@ -44,6 +44,7 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
                 mileage = entity.mileage
                 vehicleInspectionExpiryDate = entity.vehicleInspectionExpiryDate
                 insuranceExpiryDate = entity.insuranceExpiryDate
+                archived = false
             }
         }
 

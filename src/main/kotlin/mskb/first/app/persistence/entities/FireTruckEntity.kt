@@ -1,6 +1,5 @@
 package mskb.first.app.persistence.entities
 
-import mskb.first.app.persistence.schema.FireTruckEquipmentTable
 import mskb.first.app.persistence.schema.FireTruckParameterTable
 import mskb.first.app.persistence.schema.FireTruckTable
 import org.jetbrains.exposed.dao.IntEntity
@@ -23,6 +22,7 @@ class FireTruckEntity(id: EntityID<Int>): IntEntity(id) {
     var mileage by FireTruckTable.mileage
     var vehicleInspectionExpiryDate by FireTruckTable.vehicleInspectionExpiryDate
     var insuranceExpiryDate by FireTruckTable.insuranceExpiryDate
+    var archived by FireTruckTable.archived
     val parameters: SizedIterable<FireTruckParametersEntity>?
         by FireTruckParametersEntity optionalReferrersOn FireTruckParameterTable.fireTruckId
 }

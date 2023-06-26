@@ -36,6 +36,7 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
                 phoneNumber = entity.phoneNumber
                 periodicMedicalExaminationExpiryDate = entity.periodicMedicalExaminationExpiryDate
                 isDriver = entity.isDriver
+                archived = false
             }
         }
 
