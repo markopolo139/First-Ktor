@@ -7,7 +7,11 @@ import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.entities.FireTruckEntity
 import mskb.first.app.persistence.entities.StorageLocationEntity
+import mskb.first.app.persistence.schema.EquipmentTable
+import mskb.first.app.persistence.schema.StorageLocationTable
+import mskb.first.app.utils.toApp
 import org.jetbrains.exposed.dao.load
+import org.jetbrains.exposed.sql.JoinType
 
 class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
 
@@ -22,7 +26,13 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
         EquipmentEntity.findById(id) ?: throw EntityNotFound()
     }
 
-    //TODO: getting equipment by storage location
+    suspend fun getByStorageName(storageName: String): List<EquipmentEntity> {
+        val storageId = storageLocationRepository.findByName(storageName).id
+
+        return dbQuery {
+            EquipmentEntity.find { EquipmentTable.storageLocation eq storageId }.toList()
+        }
+    }
 
     override suspend fun save(entity: Equipment): EquipmentEntity {
         val storage = if (entity.storageLocation == "default" || entity.storageLocation.isBlank())
@@ -46,7 +56,13 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
     override suspend fun saveAll(entities: List<Equipment>): List<EquipmentEntity> = dbQuery { entities.map { save(it) } }
 
     suspend fun changeLocation(entity: Equipment, newStorage: StorageLocationEntity) {
-        TODO("Not yet implemented")
+        val storage = storageLocationRepository.findByName(entity.storageLocation)
+
+        dbQuery {
+            EquipmentEntity.findById(entity.id ?: -1)?.apply {
+                storageLocation = storage
+            } ?: throw EntityNotFound()
+        }
     }
 
     suspend fun addParameter(id: Int, parameter: EquipmentParameter): EquipmentEntity = dbQuery {

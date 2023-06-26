@@ -39,7 +39,7 @@ class EquipmentParametersRepository: CrudRepository<EquipmentParameter, Int, Equ
     }
 
     suspend fun saveAll(entities: List<EquipmentParameter>, equipment: EquipmentEntity): List<EquipmentParametersEntity> = dbQuery {
-            entities.map { save(it, equipment) }
+        entities.map { save(it, equipment) }
     }
 
     override suspend fun update(entity: EquipmentParameter): Boolean {

@@ -7,9 +7,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
-//TODO:
-// archivization option for fire truck, member (it will just be additional column in database)
-// add filter queries
+//TODO: add filter queries
 object DatabaseFactory {
 
     fun init() {
@@ -32,4 +30,6 @@ object DatabaseFactory {
 
     suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }
+
+    fun <T> dbQueryNotSuspend(block: () -> T): T = transaction { block() }
 }
