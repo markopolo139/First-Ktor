@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
-//TODO: think about on update/delete cascade option
+//TODO:
 // archivization option for fire truck, member (it will just be additional column in database)
 // add filter queries
 object DatabaseFactory {
@@ -24,7 +24,7 @@ object DatabaseFactory {
         transaction {
             SchemaUtils.createMissingTablesAndColumns(
                 MemberTable, TrainingTable, StorageLocationTable, EquipmentTable, EquipmentParameterTable, FireTruckTable,
-                FireTruckParameterTable, FireTruckEquipmentTable, CalloutTable, SectionTable, SectionMemberTable
+                FireTruckParameterTable, CalloutTable, SectionTable, SectionMemberTable
             )
             commit()
         }
