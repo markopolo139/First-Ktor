@@ -11,9 +11,9 @@ import mskb.first.plugins.configureLogging
 import mskb.first.plugins.configureRouting
 import mskb.first.plugins.configureSerialization
 
-fun main(args: Array<String>){
+fun main(args: Array<String>) {
     embeddedServer(Tomcat, environment = commandLineEnvironment(args), configure = {
-        configureTomcat = {  }
+        configureTomcat = { }
     }).start(wait = true)
 }
 
