@@ -3,6 +3,8 @@ package mskb.first.app.utils
 import mskb.first.app.entities.*
 import mskb.first.app.persistence.entities.*
 
+//TODO: add toModel in App, and toApp in models
+
 fun FireTruckParametersEntity.toApp() = FireTruckParameter(key, value)
 fun EquipmentParametersEntity.toApp() = EquipmentParameter(key, value)
 
@@ -13,7 +15,7 @@ fun MemberEntity.toApp() = Member(
 )
 
 fun StorageLocationEntity.toApp() = StorageLocation(
-    name, equipment.map { it.toApp() }, default
+    id.value, name, equipment.map { it.toApp() }, default
 )
 
 fun EquipmentEntity.toApp() = Equipment(

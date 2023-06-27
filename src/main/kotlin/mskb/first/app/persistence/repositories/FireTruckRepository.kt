@@ -55,7 +55,7 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
         parameterRepository.saveAll(entity.parameters, fireTruck)
 
         storageLocationRepository.save(
-            StorageLocation(fireTruck.name + fireTruck.operationalNumber, emptyList(), false)
+            StorageLocation(null, fireTruck.name + fireTruck.operationalNumber, emptyList(), false)
         )
 
         return fireTruck

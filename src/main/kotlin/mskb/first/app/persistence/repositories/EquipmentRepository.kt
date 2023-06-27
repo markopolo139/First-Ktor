@@ -3,6 +3,7 @@ package mskb.first.app.persistence.repositories
 import mskb.first.app.entities.Equipment
 import mskb.first.app.entities.EquipmentParameter
 import mskb.first.app.exceptions.EntityNotFound
+import mskb.first.app.exceptions.NoDefaultStorage
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.entities.FireTruckEntity
@@ -36,7 +37,8 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
 
     override suspend fun save(entity: Equipment): EquipmentEntity {
         val storage = if (entity.storageLocation == "default" || entity.storageLocation.isBlank())
-            storageLocationRepository.getDefault() else storageLocationRepository.findByName(entity.storageLocation)
+            storageLocationRepository.getDefault() ?: throw NoDefaultStorage()
+        else storageLocationRepository.findByName(entity.storageLocation)
 
         val equipment = dbQuery {
             EquipmentEntity.new(entity.id) {
