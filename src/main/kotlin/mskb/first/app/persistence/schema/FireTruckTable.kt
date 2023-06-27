@@ -9,7 +9,7 @@ object FireTruckTable: IntIdTable("fire_trucks", "fire_truck_id") {
     val vin = varchar("vin", 256)
     val productionYear = integer("production_year")
     val licensePlate = varchar("license_plate", 256)
-    val operationalNumber = varchar("operational_number", 256)
+    val operationalNumber = varchar("operational_number", 256).uniqueIndex()
     val type = varchar("type", 256)
     val totalWeight = integer("total_weight")
     val horsepower = integer("horsepower")

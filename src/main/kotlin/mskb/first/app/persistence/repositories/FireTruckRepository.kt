@@ -3,6 +3,7 @@ package mskb.first.app.persistence.repositories
 import mskb.first.app.entities.Equipment
 import mskb.first.app.entities.FireTruck
 import mskb.first.app.entities.FireTruckParameter
+import mskb.first.app.entities.StorageLocation
 import mskb.first.app.exceptions.AppException
 import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
@@ -18,8 +19,11 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
     private val parameterRepository = FireTruckParametersRepository()
     private val storageLocationRepository = StorageLocationRepository()
 
-    //TODO: get not archivized [this can be getAll and getByID] and archivized
     override suspend fun getAll(): List<FireTruckEntity> = dbQuery {
+        FireTruckEntity.all().filter { !it.archived }.toList()
+    }
+
+    suspend fun getAllWithArchived(): List<FireTruckEntity> = dbQuery {
         FireTruckEntity.all().toList()
     }
 
@@ -27,7 +31,6 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
         FireTruckEntity.findById(id) ?: throw EntityNotFound()
     }
 
-    //TODO: also create storage location with truck name
     override suspend fun save(entity: FireTruck): FireTruckEntity {
         val fireTruck = dbQuery {
             FireTruckEntity.new(entity.id) {
@@ -49,6 +52,10 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
         }
 
         parameterRepository.saveAll(entity.parameters, fireTruck)
+
+        storageLocationRepository.save(
+            StorageLocation(fireTruck.name + fireTruck.operationalNumber, emptyList(), false)
+        )
 
         return fireTruck
     }
@@ -90,10 +97,13 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
         true
     }
 
-    //TODO: also delete storage location with truck name, and move equipment to default (function in storage repo)
-    // delete does not delete only set archivized to true
     override suspend fun delete(id: Int): Boolean = dbQuery {
-        FireTruckEntity.findById(id)?.delete() ?: throw EntityNotFound()
+        val fireTruck = FireTruckEntity.findById(id) ?: throw EntityNotFound()
+        fireTruck.archived = true
+
+        val storage = storageLocationRepository.findByName(fireTruck.name + fireTruck.operationalNumber)
+
+        storageLocationRepository.delete(storage.id.value)
         true
     }
 }

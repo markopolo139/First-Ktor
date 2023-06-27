@@ -13,8 +13,11 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
 
     private val trainingRepository = TrainingRepository()
 
-    //TODO: get not archivized [this can be getAll and getByID] and archivized
     override suspend fun getAll(): List<MemberEntity> = dbQuery {
+        MemberEntity.all().filter { !it.archived }.toList()
+    }
+
+    suspend fun getAllWithArchived(): List<MemberEntity> = dbQuery {
         MemberEntity.all().toList()
     }
 
@@ -49,9 +52,7 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
 
     suspend fun saveNewTraining(id: Int, training: Training): MemberEntity = dbQuery {
         val member = MemberEntity.findById(id) ?: throw EntityNotFound()
-
         trainingRepository.save(training, member)
-
         member
     }
 
@@ -73,9 +74,8 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
         true
     }
 
-    //TODO: delete does not delete only set archivized to true
     override suspend fun delete(id: Int): Boolean = dbQuery {
-        MemberEntity.findById(id)?.delete()
+        MemberEntity.findById(id)?.apply { archived = true }
         true
     }
 }
