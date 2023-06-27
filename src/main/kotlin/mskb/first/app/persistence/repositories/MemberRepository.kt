@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 import mskb.first.app.entities.Member
 import mskb.first.app.entities.Training
 import mskb.first.app.exceptions.EntityNotFound
+import mskb.first.app.exceptions.FeatureNotImplemented
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.MemberEntity
 import org.jetbrains.exposed.dao.load
@@ -74,7 +75,9 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
         true
     }
 
-    override suspend fun delete(id: Int): Boolean = dbQuery {
+    override suspend fun delete(id: Int): Boolean = throw FeatureNotImplemented()
+
+    suspend fun archive(id: Int): Boolean = dbQuery {
         MemberEntity.findById(id)?.apply { archived = true }
         true
     }

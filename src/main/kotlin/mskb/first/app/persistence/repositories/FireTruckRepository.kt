@@ -6,6 +6,7 @@ import mskb.first.app.entities.FireTruckParameter
 import mskb.first.app.entities.StorageLocation
 import mskb.first.app.exceptions.AppException
 import mskb.first.app.exceptions.EntityNotFound
+import mskb.first.app.exceptions.FeatureNotImplemented
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.entities.FireTruckEntity
@@ -97,7 +98,9 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
         true
     }
 
-    override suspend fun delete(id: Int): Boolean = dbQuery {
+    override suspend fun delete(id: Int): Boolean = throw FeatureNotImplemented()
+
+    suspend fun archive(id:Int): Boolean = dbQuery {
         val fireTruck = FireTruckEntity.findById(id) ?: throw EntityNotFound()
         fireTruck.archived = true
 
