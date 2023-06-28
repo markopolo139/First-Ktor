@@ -10,5 +10,5 @@ class MemberModel(
     @Serializable(with = LocalDateIso8601Serializer::class) val birthdate: LocalDate, val birthplace: String,
     val idNumber: String, val address: String, @Serializable(with = LocalDateIso8601Serializer::class) val joiningDate: LocalDate,
     val role: String, val phoneNumber: String, @Serializable(with = LocalDateIso8601Serializer::class) val periodicMedicalExaminationExpiryDate: LocalDate,
-    val isDriver: Boolean, val trainings: MutableList<TrainingModel>
+    val isDriver: Boolean, val trainings: List<TrainingModel>
 )
