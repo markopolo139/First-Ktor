@@ -8,5 +8,5 @@ import kotlinx.datetime.serializers.LocalDateTimeIso8601Serializer
 @Serializable
 class CalloutModel(
     val id: Int?, @Serializable(with = LocalDateTimeIso8601Serializer::class) val alarmDate: LocalDateTime,
-    var type: CalloutType, var location: String, var details: String?, val sections: MutableList<SectionModel>
+    val type: CalloutType, val location: String, val details: String?, val sections: MutableList<SectionModel>
 )

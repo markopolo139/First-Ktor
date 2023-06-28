@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class MemberModel(
-    val id: Int?, var firstname: String, var lastname: String,
-    @Serializable(with = LocalDateIso8601Serializer::class) var birthdate: LocalDate, var birthplace: String,
-    var idNumber: String, var address: String, @Serializable(with = LocalDateIso8601Serializer::class) var joiningDate: LocalDate,
-    var role: String, var phoneNumber: String, @Serializable(with = LocalDateIso8601Serializer::class) var periodicMedicalExaminationExpiryDate: LocalDate,
-    var isDriver: Boolean, val trainings: MutableList<TrainingModel>
+    val id: Int?, val firstname: String, val lastname: String,
+    @Serializable(with = LocalDateIso8601Serializer::class) val birthdate: LocalDate, val birthplace: String,
+    val idNumber: String, val address: String, @Serializable(with = LocalDateIso8601Serializer::class) val joiningDate: LocalDate,
+    val role: String, val phoneNumber: String, @Serializable(with = LocalDateIso8601Serializer::class) val periodicMedicalExaminationExpiryDate: LocalDate,
+    val isDriver: Boolean, val trainings: MutableList<TrainingModel>
 )

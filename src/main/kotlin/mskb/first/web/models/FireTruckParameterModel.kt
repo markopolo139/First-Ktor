@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class FireTruckParameterModel(
-    val key: String, var value: String
+    val key: String, val value: String
 )

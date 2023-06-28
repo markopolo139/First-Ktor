@@ -7,7 +7,7 @@ import kotlinx.datetime.LocalDate
 
 @Serializable
 class TrainingModel(
-    val id: String?, var type: TrainingType,
-    @Serializable(with = LocalDateIso8601Serializer::class) var trainingDate: LocalDate,
-    @Serializable(with = LocalDateIso8601Serializer::class) var expirationDate: LocalDate
+    val id: String?, val type: TrainingType,
+    @Serializable(with = LocalDateIso8601Serializer::class) val trainingDate: LocalDate,
+    @Serializable(with = LocalDateIso8601Serializer::class) val expirationDate: LocalDate
 )
