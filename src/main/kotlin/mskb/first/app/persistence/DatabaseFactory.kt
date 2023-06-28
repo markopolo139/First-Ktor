@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
-//TODO: add filter queries
+//TODO: add filter queries, one route to move list of equipment ot another storage
 object DatabaseFactory {
 
     fun init() {

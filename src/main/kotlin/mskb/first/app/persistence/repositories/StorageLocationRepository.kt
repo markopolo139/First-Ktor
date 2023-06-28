@@ -38,7 +38,7 @@ class StorageLocationRepository: CrudRepository<StorageLocation, Int, StorageLoc
         val storage = dbQuery {
             StorageLocationEntity.new(entity.id) {
                 name = entity.name
-                default = entity.default
+                default = false
             }
         }
 
