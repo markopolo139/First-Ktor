@@ -12,5 +12,5 @@ class FireTruckModel(
     val operationNumber: String, val type: String, val totalWeight: Int, val horsepower: Int, val numberOfSeats: Int,
     val mileage: Int, @Serializable(with = LocalDateIso8601Serializer::class) val vehicleInspectionExpiryDate: LocalDate,
     @Serializable(with = LocalDateIso8601Serializer::class) val insuranceExpiryDate: LocalDate,
-    val parameters: List<FireTruckParameterModel>, val equipment: List<EquipmentModel>
+    val parameters: List<FireTruckParameterModel>
 )
