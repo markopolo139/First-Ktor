@@ -2,6 +2,7 @@ package mskb.first.app.persistence.repositories
 
 import mskb.first.app.entities.Equipment
 import mskb.first.app.entities.EquipmentParameter
+import mskb.first.app.entities.StorageLocation
 import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.exceptions.NoDefaultStorage
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
@@ -57,8 +58,8 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
 
     override suspend fun saveAll(entities: List<Equipment>): List<EquipmentEntity> = dbQuery { entities.map { save(it) } }
 
-    suspend fun changeLocation(entity: Equipment, newStorage: StorageLocationEntity) {
-        val storage = storageLocationRepository.findByName(entity.storageLocation)
+    suspend fun changeLocation(entity: Equipment, newStorageName: String) {
+        val storage = storageLocationRepository.findByName(newStorageName)
 
         dbQuery {
             EquipmentEntity.findById(entity.id ?: -1)?.apply {

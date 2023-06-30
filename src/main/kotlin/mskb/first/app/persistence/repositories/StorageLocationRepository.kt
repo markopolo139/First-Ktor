@@ -42,7 +42,7 @@ class StorageLocationRepository: CrudRepository<StorageLocation, Int, StorageLoc
             }
         }
 
-        entity.assignedEquipment.forEach { equipmentRepository.changeLocation(it, storage) }
+        entity.assignedEquipment.forEach { equipmentRepository.changeLocation(it, storage.name) }
 
         return storage
     }
