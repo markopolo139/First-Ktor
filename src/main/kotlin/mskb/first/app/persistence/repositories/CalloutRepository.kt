@@ -40,6 +40,10 @@ class CalloutRepository: CrudRepository<Callout, Int, CalloutEntity> {
         callout
     }
 
+    suspend fun updateSection(section: Section): Boolean = dbQuery {
+        sectionRepository.update(section)
+    }
+
     suspend fun removeSection(id: Int, section: Section): CalloutEntity = dbQuery {
         sectionRepository.delete(section.id ?: throw EntityNotFound())
         val callout = CalloutEntity.findById(id)?.load(CalloutEntity::sections) ?: throw EntityNotFound()

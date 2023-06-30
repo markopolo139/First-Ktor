@@ -75,6 +75,10 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
         entity
     }
 
+    suspend fun updateParameter(id: Int, parameter: EquipmentParameter): Boolean = dbQuery {
+        parameterRepository.update(id, parameter.key, parameter.value)
+    }
+
     suspend fun removeParameter(id: Int, parameterKey: String): EquipmentEntity = dbQuery {
         parameterRepository.delete(id, parameterKey)
         val entity = EquipmentEntity.findById(id)?.load(EquipmentEntity::parameters) ?: throw EntityNotFound()

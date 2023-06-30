@@ -72,6 +72,10 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
         entity
     }
 
+    suspend fun updateParameter(id: Int, parameter: FireTruckParameter): Boolean = dbQuery {
+        parameterRepository.update(id, parameter.key, parameter.value)
+    }
+
     suspend fun removeParameter(id: Int, parameterKey: String): FireTruckEntity = dbQuery {
         parameterRepository.delete(id, parameterKey)
         val entity = FireTruckEntity.findById(id)?.load(FireTruckEntity::parameters) ?: throw EntityNotFound()

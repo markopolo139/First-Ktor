@@ -57,6 +57,10 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
         member
     }
 
+    suspend fun updateTraining(training: Training): Boolean = dbQuery {
+        trainingRepository.update(training)
+    }
+
     suspend fun removeTraining(id: Int, training: Training): MemberEntity = dbQuery {
         trainingRepository.delete(training.id ?: throw EntityNotFound())
         val member = MemberEntity.findById(id)?.load(MemberEntity::trainings) ?: throw EntityNotFound()

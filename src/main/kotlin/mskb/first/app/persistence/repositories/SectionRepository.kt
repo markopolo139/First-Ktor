@@ -66,7 +66,19 @@ class SectionRepository: CrudRepository<Section, Int, SectionEntity> {
     }
 
     override suspend fun update(entity: Section): Boolean = dbQuery {
-        throw FeatureNotImplemented()
+        val section = SectionEntity.findById(entity.id ?: -1)?.apply {
+            departureTime = entity.departureDate
+            returnTime = entity.returnDate
+        } ?: throw EntityNotFound()
+
+        val newCrew = section.crew.toMutableSet()
+        newCrew.addAll(
+            entity.crew.map { memberRepository.getById(it.id ?: -1) }
+        )
+
+        section.crew = SizedCollection(newCrew)
+
+        true
     }
 
     override suspend fun delete(id: Int): Boolean = dbQuery {

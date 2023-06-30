@@ -42,6 +42,14 @@ class EquipmentParametersRepository: CrudRepository<EquipmentParameter, Int, Equ
         entities.map { save(it, equipment) }
     }
 
+    suspend fun update(parentId: Int, key: String, newValue: String): Boolean = dbQuery {
+        EquipmentParametersEntity.find {
+            (EquipmentParameterTable.key eq key) and (EquipmentParameterTable.equipmentId eq parentId)
+        }.firstOrNull()?.apply { value = newValue }
+
+        true
+    }
+
     override suspend fun update(entity: EquipmentParameter): Boolean {
         throw FeatureNotImplemented()
     }
