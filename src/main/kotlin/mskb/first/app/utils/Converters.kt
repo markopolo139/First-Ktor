@@ -35,7 +35,7 @@ fun FireTruckEntity.toApp() = FireTruck(
 )
 
 fun SectionEntity.toApp() = Section(
-    fireTruck.toApp(), departureTime, returnTime, crew.map { it.toApp() }.toMutableList()
+    id.value, fireTruck.toApp(), departureTime, returnTime, crew.map { it.toApp() }.toMutableList()
 )
 
 fun CalloutEntity.toApp() = Callout(
@@ -69,7 +69,7 @@ fun FireTruck.toModel() = FireTruckModel(
 )
 
 fun Section.toModel() = SectionModel(
-    fireTruck?.toModel(), departureDate.toKotlinLocalDateTime(), returnDate.toKotlinLocalDateTime(),
+    id, fireTruck?.toModel(), departureDate.toKotlinLocalDateTime(), returnDate.toKotlinLocalDateTime(),
     crew.map { it.toModel() }.toList()
 )
 
@@ -103,7 +103,7 @@ fun FireTruckModel.toApp() = FireTruck(
 )
 
 fun SectionModel.toApp() = Section(
-    fireTruck?.toApp(), departureDate.toJavaLocalDateTime(), returnDate.toJavaLocalDateTime(), crew.map { it.toApp() }.toMutableList()
+    id, fireTruck?.toApp(), departureDate.toJavaLocalDateTime(), returnDate.toJavaLocalDateTime(), crew.map { it.toApp() }.toMutableList()
 )
 
 fun CalloutModel.toApp() = Callout(

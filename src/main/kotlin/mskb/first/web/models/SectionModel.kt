@@ -8,7 +8,7 @@ import kotlinx.datetime.LocalDateTime
 
 @Serializable
 class SectionModel(
-    val fireTruck: FireTruckModel?,
+    val id: Int?, val fireTruck: FireTruckModel?,
     @Serializable(with = LocalDateTimeIso8601Serializer::class) val departureDate: LocalDateTime,
     @Serializable(with = LocalDateTimeIso8601Serializer::class) val returnDate: LocalDateTime, val crew: List<MemberModel>
 )
