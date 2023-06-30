@@ -5,6 +5,7 @@ import mskb.first.app.entities.Section
 import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.CalloutEntity
+import org.jetbrains.exposed.dao.load
 
 class CalloutRepository: CrudRepository<Callout, Int, CalloutEntity> {
 
@@ -36,6 +37,12 @@ class CalloutRepository: CrudRepository<Callout, Int, CalloutEntity> {
     suspend fun addSection(id: Int, section: Section): CalloutEntity = dbQuery {
         val callout = CalloutEntity.findById(id) ?: throw EntityNotFound()
         sectionRepository.save(section, callout)
+        callout
+    }
+
+    suspend fun removeSection(id: Int, section: Section): CalloutEntity = dbQuery {
+        sectionRepository.delete(section.id ?: throw EntityNotFound())
+        val callout = CalloutEntity.findById(id)?.load(CalloutEntity::sections) ?: throw EntityNotFound()
         callout
     }
 

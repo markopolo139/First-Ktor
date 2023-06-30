@@ -57,6 +57,12 @@ class MemberRepository: CrudRepository<Member, Int, MemberEntity> {
         member
     }
 
+    suspend fun removeTraining(id: Int, training: Training): MemberEntity = dbQuery {
+        trainingRepository.delete(training.id ?: throw EntityNotFound())
+        val member = MemberEntity.findById(id)?.load(MemberEntity::trainings) ?: throw EntityNotFound()
+        member
+    }
+
     override suspend fun update(entity: Member): Boolean = dbQuery {
         MemberEntity.findById(entity.id ?: -1)?.apply {
             firstname = entity.firstname

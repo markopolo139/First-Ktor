@@ -18,7 +18,6 @@ class TrainingRepository: CrudRepository<Training, String, TrainingEntity> {
             type = entity.type
             trainingDate = entity.trainingDate
             expirationDate = entity.expirationDate
-
         }
     }
 
