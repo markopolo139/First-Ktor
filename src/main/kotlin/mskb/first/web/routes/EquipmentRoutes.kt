@@ -48,6 +48,17 @@ fun Route.equipmentRoutes() {
             call.respond(equipmentService.changeLocation(equipment, storageName))
         }
 
+        put("/list/change/location/{name}") {
+            val storageName = call.parameters["name"]
+                ?: return@put call.respondText("No name", status = HttpStatusCode.BadRequest)
+
+            val equipment = call.receive<Array<EquipmentModel>>().map {
+                equipmentService.changeLocation(it.toApp(), storageName)
+            }
+
+            call.respond(equipment)
+        }
+
         post("/add/parameter/{id}") {
             val id = call.parameters["id"]?.toIntOrNull()
                 ?: return@post call.respondText("Invalid id", status = HttpStatusCode.BadRequest)
