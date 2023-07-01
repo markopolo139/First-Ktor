@@ -20,8 +20,8 @@ class StorageLocationRepository: CrudRepository<StorageLocation, Int, StorageLoc
         StorageLocationEntity.find { StorageLocationTable.name eq name }.firstOrNull() ?: throw EntityNotFound()
     }
 
-    suspend fun getDefault(): StorageLocationEntity? = dbQuery {
-        StorageLocationEntity.find { StorageLocationTable.default eq true }.firstOrNull()
+    suspend fun getDefault(): StorageLocationEntity = dbQuery {
+        StorageLocationEntity.find { StorageLocationTable.default eq true }.firstOrNull() ?: throw EntityNotFound()
     }
 
     override suspend fun getById(id: Int): StorageLocationEntity = dbQuery {
