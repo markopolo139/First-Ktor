@@ -11,6 +11,8 @@ import mskb.first.plugins.configureLogging
 import mskb.first.plugins.configureRouting
 import mskb.first.plugins.configureSerialization
 
+//TODO: validation(check if works for nested objects), routes and exception handling
+
 fun main(args: Array<String>) {
     embeddedServer(Tomcat, environment = commandLineEnvironment(args), configure = {
         configureTomcat = { }
