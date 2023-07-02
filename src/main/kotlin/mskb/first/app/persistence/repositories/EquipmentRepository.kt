@@ -3,17 +3,28 @@ package mskb.first.app.persistence.repositories
 import mskb.first.app.entities.Equipment
 import mskb.first.app.entities.EquipmentParameter
 import mskb.first.app.entities.StorageLocation
+import mskb.first.app.entities.enums.CalloutType
 import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.exceptions.NoDefaultStorage
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
+import mskb.first.app.persistence.entities.CalloutEntity
 import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.entities.FireTruckEntity
 import mskb.first.app.persistence.entities.StorageLocationEntity
 import mskb.first.app.persistence.schema.EquipmentTable
+import mskb.first.app.persistence.schema.SectionTable
 import mskb.first.app.persistence.schema.StorageLocationTable
 import mskb.first.app.utils.toApp
 import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greater
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
+import java.time.LocalDateTime
 
 class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
 
@@ -36,9 +47,28 @@ class EquipmentRepository: CrudRepository<Equipment, Int, EquipmentEntity> {
         }
     }
 
+    suspend fun filterQuery(
+        idStart: Int?, idEnd: Int?, name: String?, serialNumber: String?, quantityStart: Int?, quantityEnd: Int?, category: String?, storageLocation: String?,
+    ): List<EquipmentEntity> = dbQuery {
+        val query = Op.build {
+            (if (idStart != null) EquipmentTable.id greaterEq idStart else EquipmentTable.id greater 0) and
+            (if (idEnd != null) EquipmentTable.id lessEq idEnd else EquipmentTable.id greater 0) and
+            (if (name != null) EquipmentTable.name eq name else EquipmentTable.id greater 0) and
+            (if (serialNumber != null) EquipmentTable.serialNumber eq serialNumber else EquipmentTable.id greater 0) and
+            (if (quantityStart != null) EquipmentTable.quantity greaterEq quantityStart else EquipmentTable.id greater 0) and
+            (if (quantityEnd != null) EquipmentTable.quantity lessEq quantityEnd else EquipmentTable.id greater 0) and
+            (if (category != null) EquipmentTable.category eq category else EquipmentTable.id greater 0) and
+            (if (storageLocation != null) StorageLocationTable.name eq storageLocation else EquipmentTable.id greater 0)
+        }
+
+        EquipmentEntity.wrapRows(
+            EquipmentTable.innerJoin(StorageLocationTable).select(query)
+        ).toList()
+    }
+
     override suspend fun save(entity: Equipment): EquipmentEntity {
         val storage = if (entity.storageLocation == "default" || entity.storageLocation.isBlank())
-            storageLocationRepository.getDefault() ?: throw NoDefaultStorage()
+            storageLocationRepository.getDefault()
         else storageLocationRepository.findByName(entity.storageLocation)
 
         val equipment = dbQuery {

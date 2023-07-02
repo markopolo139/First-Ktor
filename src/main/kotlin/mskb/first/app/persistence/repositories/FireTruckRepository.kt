@@ -10,10 +10,20 @@ import mskb.first.app.exceptions.FeatureNotImplemented
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.entities.FireTruckEntity
+import mskb.first.app.persistence.schema.FireTruckTable
+import mskb.first.app.persistence.schema.StorageLocationTable
 import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.dao.with
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SizedCollection
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greater
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+import java.time.LocalDate
 
 class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
 
@@ -30,6 +40,42 @@ class FireTruckRepository: CrudRepository<FireTruck, Int, FireTruckEntity> {
 
     override suspend fun getById(id: Int): FireTruckEntity = dbQuery {
         FireTruckEntity.findById(id) ?: throw EntityNotFound()
+    }
+
+    suspend fun filterQuery(
+        idStart: Int?, idEnd: Int?, name: String?, vin: String?, productionYearStart: Int?, productionYearEnd: Int?,
+        licensePlate: String?, operationalNumber: String?, type: String?, totalWeightStart: Int?, totalWeightEnd: Int?,
+        horsepowerStart: Int?, horsepowerEnd: Int?, numberOfSeatsStart: Int?, numberOfSeatsEnd: Int?, mileageStart: Int?,
+        mileageEnd: Int?, vehicleInspectionExpiryDateStart: LocalDate?, vehicleInspectionExpiryDateEnd: LocalDate?, 
+        insuranceExpiryDateStart: LocalDate?, insuranceExpiryDateEnd: LocalDate?
+    ): List<FireTruckEntity> = dbQuery {
+        val query = Op.build {
+            (if (idStart != null) FireTruckTable.id greaterEq idStart else FireTruckTable.id greater 0) and
+            (if (idEnd != null) FireTruckTable.id lessEq idEnd else FireTruckTable.id greater 0) and
+            (if (name != null) FireTruckTable.name eq name else FireTruckTable.id greater 0) and
+            (if (vin != null) FireTruckTable.vin eq vin else FireTruckTable.id greater 0) and
+            (if (productionYearStart != null) FireTruckTable.productionYear greaterEq productionYearStart else FireTruckTable.id greater 0) and
+            (if (productionYearEnd != null) FireTruckTable.productionYear lessEq productionYearEnd else FireTruckTable.id greater 0) and
+            (if (licensePlate != null) FireTruckTable.licensePlate eq licensePlate else FireTruckTable.id greater 0) and
+            (if (operationalNumber != null) FireTruckTable.operationalNumber eq operationalNumber else FireTruckTable.id greater 0) and
+            (if (type != null) FireTruckTable.type eq type else FireTruckTable.id greater 0) and
+            (if (totalWeightStart != null) FireTruckTable.totalWeight greaterEq totalWeightStart else FireTruckTable.id greater 0) and
+            (if (totalWeightEnd != null) FireTruckTable.totalWeight lessEq totalWeightEnd else FireTruckTable.id greater 0) and
+            (if (horsepowerStart != null) FireTruckTable.horsepower greaterEq horsepowerStart else FireTruckTable.id greater 0) and
+            (if (horsepowerEnd != null) FireTruckTable.horsepower lessEq horsepowerEnd else FireTruckTable.id greater 0) and
+            (if (numberOfSeatsStart != null) FireTruckTable.numberOfSeats greaterEq numberOfSeatsStart else FireTruckTable.id greater 0) and
+            (if (numberOfSeatsEnd != null) FireTruckTable.numberOfSeats lessEq numberOfSeatsEnd else FireTruckTable.id greater 0) and
+            (if (mileageStart != null) FireTruckTable.mileage greaterEq mileageStart else FireTruckTable.id greater 0) and
+            (if (mileageEnd != null) FireTruckTable.mileage lessEq mileageEnd else FireTruckTable.id greater 0) and
+            (if (vehicleInspectionExpiryDateStart != null) FireTruckTable.vehicleInspectionExpiryDate greaterEq vehicleInspectionExpiryDateStart else FireTruckTable.id greater 0) and
+            (if (vehicleInspectionExpiryDateEnd != null) FireTruckTable.vehicleInspectionExpiryDate lessEq vehicleInspectionExpiryDateEnd else FireTruckTable.id greater 0) and
+            (if (insuranceExpiryDateStart != null) FireTruckTable.insuranceExpiryDate greaterEq insuranceExpiryDateStart else FireTruckTable.id greater 0) and
+            (if (insuranceExpiryDateEnd != null) FireTruckTable.insuranceExpiryDate lessEq insuranceExpiryDateEnd else FireTruckTable.id greater 0)
+        }
+
+        FireTruckEntity.wrapRows(
+            FireTruckTable.innerJoin(StorageLocationTable).select(query)
+        ).toList()
     }
 
     override suspend fun save(entity: FireTruck): FireTruckEntity {

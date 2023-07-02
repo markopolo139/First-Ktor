@@ -7,11 +7,10 @@ import mskb.first.app.exceptions.FeatureNotImplemented
 import mskb.first.app.exceptions.NoDefaultStorage
 import mskb.first.app.persistence.entities.StorageLocationEntity
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
+import mskb.first.app.persistence.entities.EquipmentEntity
 import mskb.first.app.persistence.schema.StorageLocationTable
 
 class StorageLocationRepository: CrudRepository<StorageLocation, Int, StorageLocationEntity> {
-    private val equipmentRepository = EquipmentRepository()
-
     override suspend fun getAll(): List<StorageLocationEntity> = dbQuery {
         StorageLocationEntity.all().toList()
     }
@@ -30,7 +29,7 @@ class StorageLocationRepository: CrudRepository<StorageLocation, Int, StorageLoc
 
     suspend fun changeDefault(entity: StorageLocation) = dbQuery {
         val newDefault = StorageLocationEntity.findById(entity.id ?: -1) ?: throw EntityNotFound()
-        getDefault()?.default = false
+        getDefault().default = false
         newDefault.default = true
     }
 
@@ -41,8 +40,6 @@ class StorageLocationRepository: CrudRepository<StorageLocation, Int, StorageLoc
                 default = false
             }
         }
-
-        entity.assignedEquipment.forEach { equipmentRepository.changeLocation(it, storage.name) }
 
         return storage
     }
@@ -56,7 +53,7 @@ class StorageLocationRepository: CrudRepository<StorageLocation, Int, StorageLoc
     override suspend fun delete(id: Int): Boolean = dbQuery {
         val storage = getById(id)
         if (storage.default) throw DefaultStorageDeleteException()
-        storage.equipment.forEach { it.storageLocation = getDefault() ?: throw NoDefaultStorage() }
+        storage.equipment.forEach { it.storageLocation = getDefault() }
         storage.delete()
         true
     }

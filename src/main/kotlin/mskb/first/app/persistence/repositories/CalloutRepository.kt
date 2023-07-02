@@ -2,10 +2,17 @@ package mskb.first.app.persistence.repositories
 
 import mskb.first.app.entities.Callout
 import mskb.first.app.entities.Section
+import mskb.first.app.entities.enums.CalloutType
 import mskb.first.app.exceptions.EntityNotFound
 import mskb.first.app.persistence.DatabaseFactory.dbQuery
 import mskb.first.app.persistence.entities.CalloutEntity
+import mskb.first.app.persistence.schema.CalloutTable
+import mskb.first.app.persistence.schema.SectionTable
 import org.jetbrains.exposed.dao.load
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
+import java.time.LocalDateTime
 
 class CalloutRepository: CrudRepository<Callout, Int, CalloutEntity> {
 
@@ -15,6 +22,23 @@ class CalloutRepository: CrudRepository<Callout, Int, CalloutEntity> {
 
     override suspend fun getById(id: Int): CalloutEntity = dbQuery {
         CalloutEntity.findById(id) ?: throw EntityNotFound()
+    }
+
+    suspend fun filterQuery(
+        idStart: Int?, idEnd: Int?, alarmDateStart: LocalDateTime?, alarmDateEnd: LocalDateTime?, type: CalloutType?, location: String?
+    ): List<CalloutEntity> = dbQuery {
+        val query = Op.build {
+            (if (idStart != null) CalloutTable.id greaterEq idStart else CalloutTable.id greater 0) and
+            (if (idEnd != null) CalloutTable.id lessEq idEnd else CalloutTable.id greater 0) and
+            (if (alarmDateStart != null) CalloutTable.alarmDate greaterEq alarmDateStart else CalloutTable.id greater 0) and
+            (if (alarmDateEnd != null) CalloutTable.alarmDate lessEq alarmDateEnd else CalloutTable.id greater 0) and
+            (if (type != null) CalloutTable.type eq type else CalloutTable.id greater 0) and
+            (if (location != null) CalloutTable.location eq location else CalloutTable.id greater 0)
+        }
+
+        CalloutEntity.wrapRows(
+            CalloutTable.innerJoin(SectionTable).select(query)
+        ).toList()
     }
 
     override suspend fun save(entity: Callout): CalloutEntity {
