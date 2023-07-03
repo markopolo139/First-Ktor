@@ -5,11 +5,13 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import mskb.first.app.entities.enums.CalloutType
 import mskb.first.app.services.EquipmentService
 import mskb.first.app.utils.toApp
 import mskb.first.web.models.EquipmentModel
 import mskb.first.web.models.EquipmentParameterModel
 import mskb.first.web.models.SectionModel
+import java.time.LocalDateTime
 
 fun Route.equipmentRoutes() {
     val equipmentService = EquipmentService()
@@ -29,6 +31,20 @@ fun Route.equipmentRoutes() {
             val storageName = call.parameters["storageName"]
                 ?: return@get call.respondText("No name", status = HttpStatusCode.BadRequest)
             call.respond(equipmentService.getByStorageName(storageName))
+        }
+
+        get("/filter") {
+            val idStart = call.request.queryParameters["idStart"]?.toIntOrNull()
+            val idEnd = call.request.queryParameters["idEnd"]?.toIntOrNull()
+            val name = call.request.queryParameters["name"]
+            val serialNumber = call.request.queryParameters["serialNumber"]
+            val quantityStart = call.request.queryParameters["quantityStart"]?.toIntOrNull()
+            val quantityEnd = call.request.queryParameters["quantityEnd"]?.toIntOrNull()
+            val category = call.request.queryParameters["category"]
+            val storageLocation = call.request.queryParameters["storageLocation"]
+            call.respond(equipmentService.filterQuery(
+                idStart, idEnd, name, serialNumber, quantityStart, quantityEnd, category, storageLocation
+            ))
         }
 
         post("/save") {

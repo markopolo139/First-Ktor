@@ -2,7 +2,9 @@ package mskb.first.app.services
 
 import mskb.first.app.entities.Callout
 import mskb.first.app.entities.Section
+import mskb.first.app.entities.enums.CalloutType
 import mskb.first.app.persistence.repositories.CalloutRepository
+import java.time.LocalDateTime
 
 class CalloutService {
     private val calloutRepository = CalloutRepository()
@@ -10,6 +12,11 @@ class CalloutService {
     suspend fun getAll() = calloutRepository.getAll()
 
     suspend fun getById(id: Int) = calloutRepository.getById(id)
+
+    suspend fun filterQuery(
+        idStart: Int?, idEnd: Int?, alarmDateStart: LocalDateTime?, alarmDateEnd: LocalDateTime?,
+        type: CalloutType?, location: String?
+    ) = calloutRepository.filterQuery(idStart, idEnd, alarmDateStart, alarmDateEnd, type, location)
 
     suspend fun save(callout: Callout) = calloutRepository.save(callout)
 

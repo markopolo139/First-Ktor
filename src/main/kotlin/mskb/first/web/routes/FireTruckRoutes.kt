@@ -5,10 +5,13 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import mskb.first.app.entities.enums.CalloutType
 import mskb.first.app.services.CalloutService
 import mskb.first.app.services.FireTruckService
 import mskb.first.app.utils.toApp
 import mskb.first.web.models.*
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 fun Route.fireTruckRoutes() {
     val fireTruckService = FireTruckService()
@@ -26,6 +29,45 @@ fun Route.fireTruckRoutes() {
             val id = call.parameters["id"]?.toIntOrNull()
                 ?: return@get call.respondText("Invalid id", status = HttpStatusCode.BadRequest)
             call.respond(fireTruckService.getById(id))
+        }
+
+        get("/filter") {
+            val idStart = call.request.queryParameters["idStart"]?.toIntOrNull()
+            val idEnd = call.request.queryParameters["idEnd"]?.toIntOrNull()
+            val name = call.request.queryParameters["name"]
+            val vin = call.request.queryParameters["vin"]
+            val productionYearStart = call.request.queryParameters["productionYearStart"]?.toIntOrNull()
+            val productionYearEnd = call.request.queryParameters["productionYearEnd"]?.toIntOrNull()
+            val licensePlate = call.request.queryParameters["licensePlate"]
+            val operationalNumber = call.request.queryParameters["operationalNumber"]
+            val type = call.request.queryParameters["type"]
+            val totalWeightStart = call.request.queryParameters["totalWeightStart"]?.toIntOrNull()
+            val totalWeightEnd = call.request.queryParameters["totalWeightEnd"]?.toIntOrNull()
+            val horsepowerStart = call.request.queryParameters["horsepowerStart"]?.toIntOrNull()
+            val horsepowerEnd = call.request.queryParameters["horsepowerEnd"]?.toIntOrNull()
+            val numberOfSeatsStart = call.request.queryParameters["numberOfSeatsStart"]?.toIntOrNull()
+            val numberOfSeatsEnd = call.request.queryParameters["numberOfSeatsEnd"]?.toIntOrNull()
+            val mileageStart = call.request.queryParameters["mileageStart"]?.toIntOrNull()
+            val mileageEnd = call.request.queryParameters["mileageEnd"]?.toIntOrNull()
+            val vehicleInspectionExpiryDateStart = try {
+                LocalDate.parse(call.request.queryParameters["vehicleInspectionExpiryDateStart"])
+            } catch (_ : Exception) { null }
+            val vehicleInspectionExpiryDateEnd = try {
+                LocalDate.parse(call.request.queryParameters["vehicleInspectionExpiryDateEnd"])
+            } catch (_ : Exception) { null }
+            val insuranceExpiryDateStart = try {
+                LocalDate.parse(call.request.queryParameters["insuranceExpiryDateStart"])
+            } catch (_ : Exception) { null }
+            val insuranceExpiryDateEnd = try {
+                LocalDate.parse(call.request.queryParameters["insuranceExpiryDateEnd"])
+            } catch (_ : Exception) { null }
+
+            call.respond(fireTruckService.filterQuery(
+                idStart, idEnd, name, vin, productionYearStart, productionYearEnd, licensePlate, operationalNumber,
+                type, totalWeightStart, totalWeightEnd, horsepowerStart, horsepowerEnd, numberOfSeatsStart,
+                numberOfSeatsEnd, mileageStart, mileageEnd, vehicleInspectionExpiryDateStart,
+                vehicleInspectionExpiryDateEnd, insuranceExpiryDateStart, insuranceExpiryDateEnd
+            ))
         }
 
         post("/save") {

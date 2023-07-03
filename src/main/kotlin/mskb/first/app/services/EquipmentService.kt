@@ -14,6 +14,11 @@ class EquipmentService {
 
     suspend fun getByStorageName(storageName: String) = equipmentRepository.getByStorageName(storageName)
 
+    suspend fun filterQuery(
+        idStart: Int?, idEnd: Int?, name: String?, serialNumber: String?, quantityStart: Int?,
+        quantityEnd: Int?, category: String?, storageLocation: String?
+    ) = equipmentRepository.filterQuery(idStart, idEnd, name, serialNumber, quantityStart, quantityEnd, category, storageLocation)
+
     suspend fun save(equipment: Equipment) = equipmentRepository.save(equipment)
 
     suspend fun saveAll(equipments: List<Equipment>) = equipmentRepository.saveAll(equipments)

@@ -3,6 +3,7 @@ package mskb.first.app.services
 import mskb.first.app.entities.FireTruck
 import mskb.first.app.entities.FireTruckParameter
 import mskb.first.app.persistence.repositories.FireTruckRepository
+import java.time.LocalDate
 
 class FireTruckService {
     private val fireTruckRepository = FireTruckRepository()
@@ -12,6 +13,19 @@ class FireTruckService {
     suspend fun getAllWithArchived() = fireTruckRepository.getAllWithArchived()
 
     suspend fun getById(id: Int) = fireTruckRepository.getById(id)
+
+    suspend fun filterQuery(
+        idStart: Int?, idEnd: Int?, name: String?, vin: String?, productionYearStart: Int?, productionYearEnd: Int?,
+        licensePlate: String?, operationalNumber: String?, type: String?, totalWeightStart: Int?, totalWeightEnd: Int?,
+        horsepowerStart: Int?, horsepowerEnd: Int?, numberOfSeatsStart: Int?, numberOfSeatsEnd: Int?, mileageStart: Int?,
+        mileageEnd: Int?, vehicleInspectionExpiryDateStart: LocalDate?, vehicleInspectionExpiryDateEnd: LocalDate?,
+        insuranceExpiryDateStart: LocalDate?, insuranceExpiryDateEnd: LocalDate?
+    ) = fireTruckRepository.filterQuery(
+        idStart, idEnd, name, vin, productionYearStart, productionYearEnd, licensePlate, operationalNumber, type,
+        totalWeightStart, totalWeightEnd, horsepowerStart, horsepowerEnd, numberOfSeatsStart, numberOfSeatsEnd,
+        mileageStart, mileageEnd, vehicleInspectionExpiryDateStart, vehicleInspectionExpiryDateEnd,
+        insuranceExpiryDateStart, insuranceExpiryDateEnd
+    )
 
     suspend fun save(fireTruck: FireTruck) = fireTruckRepository.save(fireTruck)
 

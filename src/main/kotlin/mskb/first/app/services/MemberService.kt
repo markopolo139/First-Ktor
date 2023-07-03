@@ -2,7 +2,9 @@ package mskb.first.app.services
 
 import mskb.first.app.entities.Member
 import mskb.first.app.entities.Training
+import mskb.first.app.entities.enums.TrainingType
 import mskb.first.app.persistence.repositories.MemberRepository
+import java.time.LocalDate
 
 class MemberService {
     private val memberRepository = MemberRepository()
@@ -12,6 +14,20 @@ class MemberService {
     suspend fun getAllWithArchived() = memberRepository.getAllWithArchived()
 
     suspend fun getById(id: Int) = memberRepository.getById(id)
+
+    suspend fun filterQuery(
+        idStart: Int?, idEnd: Int?, firstname: String?, lastname: String?, birthdateStart: LocalDate?, birthdateEnd: LocalDate?,
+        birthplace: String?, idNumber: String?, address: String?, joiningDateStart: LocalDate?, joiningDateEnd: LocalDate?,
+        role: String?, phoneNumber: String?, periodicMedicalExaminationExpiryDateStart: LocalDate?,
+        periodicMedicalExaminationExpiryDateEnd: LocalDate?, isDriver: Boolean?, trainingType: TrainingType?,
+        trainingDateStart: LocalDate?, trainingDateEnd: LocalDate?, trainingExpirationDateStart: LocalDate?,
+        trainingExpirationDateEnd: LocalDate?
+    ) = memberRepository.filterQuery(
+        idStart, idEnd, firstname, lastname, birthdateStart, birthdateEnd, birthplace, idNumber, address,
+        joiningDateStart, joiningDateEnd, role, phoneNumber, periodicMedicalExaminationExpiryDateStart,
+        periodicMedicalExaminationExpiryDateEnd, isDriver, trainingType, trainingDateStart, trainingDateEnd,
+        trainingExpirationDateStart, trainingExpirationDateEnd
+    )
 
     suspend fun save(member: Member) = memberRepository.save(member)
 
